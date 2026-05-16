@@ -125,9 +125,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",   
+    "http://localhost:5173",
+    "http://localhost:5174",
 ]
-
 AUTH_USER_MODEL = 'vossai_app.User'
 
 REST_FRAMEWORK = {
@@ -135,3 +135,7 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
 }
+
+import pymongo
+MONGO_CLIENT = pymongo.MongoClient('mongodb://localhost:27017/')
+MONGO_DB     = MONGO_CLIENT['vossai_db']

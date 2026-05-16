@@ -13,15 +13,15 @@ function Dashboard() {
   const [filter,   setFilter]   = useState('All')
   const [error,    setError]    = useState('')
   const [editTask, setEditTask] = useState(null)
+  const [darkMode, setDarkMode] = useState(false)
+  const [search,   setSearch]   = useState('')
 
   const [title,       setTitle]       = useState('')
   const [description, setDescription] = useState('')
   const [status,      setStatus]      = useState('Pending')
   const [dueDate,     setDueDate]     = useState('')
 
-  useEffect(() => {
-    fetchTasks()
-  }, [])
+  useEffect(() => { fetchTasks() }, [])
 
   function fetchTasks() {
     axios.get('http://127.0.0.1:8000/api/tasks', { headers })
@@ -32,16 +32,11 @@ function Dashboard() {
   function handleCreate(e) {
     e.preventDefault()
     if (!title) { setError('Title is required'); return }
-
     axios.post('http://127.0.0.1:8000/api/tasks',
       { title, description, status, due_date: dueDate },
       { headers }
     ).then(() => {
-      setTitle('')
-      setDescription('')
-      setStatus('Pending')
-      setDueDate('')
-      setError('')
+      setTitle(''); setDescription(''); setStatus('Pending'); setDueDate(''); setError('')
       fetchTasks()
     }).catch(() => setError('Failed to create task'))
   }
@@ -65,16 +60,27 @@ function Dashboard() {
     navigate('/login')
   }
 
-  const filteredTasks = filter === 'All' ? tasks : tasks.filter(t => t.status === filter)
+  const filteredTasks = tasks
+    .filter(t => filter === 'All' || t.status === filter)
+    .filter(t => {
+      const q = search.trim().toLowerCase()
+      if (!q) return true
+      return (
+        t.title.toLowerCase().includes(q) ||
+        (t.description && t.description.toLowerCase().includes(q))
+      )
+    })
 
   return (
-    <div className="dashboard">
+    <div className={`dashboard ${darkMode ? 'dark' : ''}`}>
 
-      {/* Navbar */}
       <div className="navbar">
         <h2>Task Manager</h2>
         <div>
           <span>Welcome, {userName}</span>
+          <button onClick={() => setDarkMode(!darkMode)}>
+            {darkMode ? '☀️ Light' : '🌙 Dark'}
+          </button>
           <button onClick={handleLogout}>Logout</button>
         </div>
       </div>
@@ -98,18 +104,67 @@ function Dashboard() {
           </form>
         </div>
 
-        {/* Filter */}
+        {/* ===== SEARCH BOX ===== */}
+        <div style={{
+          background: '#fff',
+          padding: '16px 20px',
+          borderRadius: '10px',
+          marginBottom: '20px',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '10px',
+          boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
+        }}>
+          <input
+            type="text"
+            placeholder="🔍 Search by title or description…"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            style={{
+              flex: 1,
+              padding: '10px 14px',
+              borderRadius: '8px',
+              border: '1px solid #ddd',
+              fontSize: '14px',
+              color: '#333',
+              outline: 'none'
+            }}
+          />
+          {search && (
+            <button
+              onClick={() => setSearch('')}
+              style={{
+                padding: '8px 14px',
+                background: '#ef4444',
+                color: '#fff',
+                border: 'none',
+                borderRadius: '6px',
+                cursor: 'pointer',
+                whiteSpace: 'nowrap'
+              }}
+            >
+              ✕ Clear
+            </button>
+          )}
+        </div>
+
+        {/* Filters */}
         <div className="filters">
-          <button className={`filter-btn ${filter === 'All'         ? 'active' : ''}`} onClick={() => setFilter('All')}>All</button>
-          <button className={`filter-btn ${filter === 'Pending'     ? 'active' : ''}`} onClick={() => setFilter('Pending')}>Pending</button>
-          <button className={`filter-btn ${filter === 'In Progress' ? 'active' : ''}`} onClick={() => setFilter('In Progress')}>In Progress</button>
-          <button className={`filter-btn ${filter === 'Completed'   ? 'active' : ''}`} onClick={() => setFilter('Completed')}>Completed</button>
+          {['All', 'Pending', 'In Progress', 'Completed'].map(f => (
+            <button key={f} className={`filter-btn ${filter === f ? 'active' : ''}`} onClick={() => setFilter(f)}>
+              {f}
+            </button>
+          ))}
         </div>
 
         {/* Task List */}
         <div className="card">
           <h3>My Tasks ({filteredTasks.length})</h3>
-          {filteredTasks.length === 0 && <p className="no-tasks">No tasks found</p>}
+          {filteredTasks.length === 0 && (
+            <p className="no-tasks">
+              {search ? `No tasks matching "${search}"` : 'No tasks found'}
+            </p>
+          )}
           {filteredTasks.map(task => (
             <div key={task.id} className="task-item">
               <div>
@@ -133,14 +188,14 @@ function Dashboard() {
             <div className="modal-card">
               <h3>Edit Task</h3>
               <form onSubmit={handleUpdate}>
-                <input type="text" value={editTask.title} onChange={(e) => setEditTask({...editTask, title: e.target.value})} />
-                <textarea value={editTask.description} onChange={(e) => setEditTask({...editTask, description: e.target.value})} />
-                <select value={editTask.status} onChange={(e) => setEditTask({...editTask, status: e.target.value})}>
+                <input type="text" value={editTask.title} onChange={(e) => setEditTask({ ...editTask, title: e.target.value })} />
+                <textarea value={editTask.description || ''} onChange={(e) => setEditTask({ ...editTask, description: e.target.value })} />
+                <select value={editTask.status} onChange={(e) => setEditTask({ ...editTask, status: e.target.value })}>
                   <option>Pending</option>
                   <option>In Progress</option>
                   <option>Completed</option>
                 </select>
-                <input type="date" value={editTask.due_date || ''} onChange={(e) => setEditTask({...editTask, due_date: e.target.value})} />
+                <input type="date" value={editTask.due_date || ''} onChange={(e) => setEditTask({ ...editTask, due_date: e.target.value })} />
                 <button type="submit">Update</button>
                 <button type="button" className="cancel-btn" onClick={() => setEditTask(null)}>Cancel</button>
               </form>

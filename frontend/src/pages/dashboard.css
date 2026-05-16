@@ -20,6 +20,7 @@
   border-radius: 6px;
   cursor: pointer;
   font-weight: bold;
+  margin-left: 10px;
 }
 
 .content { max-width: 800px; margin: 30px auto; padding: 0 20px; }
@@ -58,6 +59,47 @@
   margin-bottom: 8px;
 }
 
+/* Search */
+.search-card {
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.search-input {
+  flex: 1;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+  box-sizing: border-box;
+  background: #fff;
+  color: #333;
+  margin-bottom: 0 !important;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 2px rgba(79,70,229,0.2);
+}
+
+.clear-btn {
+  padding: 8px 14px !important;
+  background: #ef4444 !important;
+  color: #fff !important;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px !important;
+  cursor: pointer;
+  width: auto !important;
+  white-space: nowrap;
+  margin-bottom: 0 !important;
+}
+
+/* Filters */
 .filters {
   display: flex;
   gap: 10px;
@@ -83,6 +125,7 @@
   border: 1px solid #4f46e5;
 }
 
+/* Tasks */
 .task-item {
   display: flex;
   justify-content: space-between;
@@ -103,6 +146,7 @@
 .edit-btn   { padding: 6px 14px; background: #f59e0b; color: #fff; border: none; border-radius: 6px; cursor: pointer; }
 .delete-btn { padding: 6px 14px; background: #ef4444; color: #fff; border: none; border-radius: 6px; cursor: pointer; }
 
+/* Modal */
 .modal {
   position: fixed;
   top: 0; left: 0;
@@ -152,3 +196,50 @@
 
 .error    { color: red; margin-bottom: 10px; }
 .no-tasks { color: #999; text-align: center; padding: 20px; }
+
+/* Dark Mode */
+.dark { background: #1a1a2e !important; color: #fff; }
+.dark .navbar { background: #16213e; }
+
+.dark .card {
+  background: #16213e;
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+}
+
+.dark .card h3 { color: #fff; }
+
+.dark .card input,
+.dark .card textarea,
+.dark .card select,
+.dark .search-input {
+  background: #0f3460;
+  color: #fff;
+  border: 1px solid #444;
+}
+
+.dark .search-input::placeholder { color: #aaa; }
+
+.dark .task-item { border-bottom: 1px solid #444; }
+.dark .task-item h4 { color: #fff; }
+.dark .task-item p  { color: #aaa; }
+
+.dark .filter-btn {
+  background: #16213e !important;
+  color: #fff !important;
+  border: 1px solid #444 !important;
+}
+.dark .filter-btn.active {
+  background: #4f46e5 !important;
+  color: #fff !important;
+}
+
+.dark .modal-card { background: #16213e; color: #fff; }
+.dark .modal-card h3 { color: #fff; }
+.dark .modal-card input,
+.dark .modal-card textarea,
+.dark .modal-card select {
+  background: #0f3460;
+  color: #fff;
+  border: 1px solid #444;
+}

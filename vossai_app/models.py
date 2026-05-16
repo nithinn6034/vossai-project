@@ -17,7 +17,7 @@ class UserManager(BaseUserManager):
 
     def create_superuser(self, name, email, password):
         user = self.create_user(name=name, email=email, password=password)
-        user.is_staff    = True
+        user.is_staff     = True
         user.is_superuser = True
         user.save(using=self._db)
         return user
@@ -35,36 +35,3 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.name
-
-
-class Task(models.Model):
-    STATUS_CHOICES = [
-        ('Pending',     'Pending'),
-        ('In Progress', 'In Progress'),
-        ('Completed',   'Completed'),
-    ]
-    title       = models.CharField(max_length=200)
-    description = models.TextField(null=True, blank=True)
-    status      = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Pending')
-    due_date    = models.DateField(null=True, blank=True)
-    user        = models.ForeignKey(User, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return self.title
-
-    def is_pending(self):
-        return self.status == 'Pending'
-
-    def is_in_progress(self):
-        return self.status == 'In Progress'
-
-    def is_completed(self):
-        return self.status == 'Completed'
-
-    def mark_completed(self):
-        self.status = 'Completed'
-        self.save()
-
-    def mark_in_progress(self):
-        self.status = 'In Progress'
-        self.save()
