@@ -168,7 +168,7 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 # WhiteNoise compression
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-TEMPLATES[0]['DIRS'] = [BASE_DIR / 'frontend' / 'dist']
+TEMPLATES[0]['DIRS'] = [BASE_DIR / 'staticfiles', BASE_DIR / 'frontend' / 'dist']
 
 STATICFILES_DIRS = [
     BASE_DIR / 'frontend' / 'dist' / 'assets',
