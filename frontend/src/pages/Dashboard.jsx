@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import './Dashboard.css'
 
+const API = 'https://vossai.onrender.com'
+
 function Dashboard() {
   const navigate = useNavigate()
   const token    = localStorage.getItem('token')
@@ -24,7 +26,7 @@ function Dashboard() {
   useEffect(() => { fetchTasks() }, [])
 
   function fetchTasks() {
-    axios.get('http://127.0.0.1:8000/api/tasks', { headers })
+    axios.get(`${API}/api/tasks/`, { headers })
       .then((res) => setTasks(res.data))
       .catch(() => setError('Failed to fetch tasks'))
   }
@@ -32,7 +34,7 @@ function Dashboard() {
   function handleCreate(e) {
     e.preventDefault()
     if (!title) { setError('Title is required'); return }
-    axios.post('http://127.0.0.1:8000/api/tasks',
+    axios.post(`${API}/api/tasks/`,
       { title, description, status, due_date: dueDate },
       { headers }
     ).then(() => {
@@ -42,14 +44,14 @@ function Dashboard() {
   }
 
   function handleDelete(id) {
-    axios.delete(`http://127.0.0.1:8000/api/tasks/${id}/`, { headers })
+    axios.delete(`${API}/api/tasks/${id}/`, { headers })
       .then(() => fetchTasks())
       .catch(() => setError('Failed to delete task'))
   }
 
   function handleUpdate(e) {
     e.preventDefault()
-    axios.put(`http://127.0.0.1:8000/api/tasks/${editTask.id}/`, editTask, { headers })
+    axios.put(`${API}/api/tasks/${editTask.id}/`, editTask, { headers })
       .then(() => { setEditTask(null); fetchTasks() })
       .catch(() => setError('Failed to update task'))
   }
@@ -104,7 +106,7 @@ function Dashboard() {
           </form>
         </div>
 
-        {/* ===== SEARCH BOX ===== */}
+        {/* Search Box */}
         <div style={{
           background: '#fff',
           padding: '16px 20px',

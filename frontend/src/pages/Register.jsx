@@ -25,7 +25,7 @@ function Register() {
       return
     }
 
-    axios.post('http://127.0.0.1:8000/api/register', { name, email, password })
+    axios.post('https://vossai.onrender.com/api/register/', { name, email, password })
       .then((res) => {
         setSuccess('Registration successful! Redirecting...')
         setTimeout(() => navigate('/login'), 2000)

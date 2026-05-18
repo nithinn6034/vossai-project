@@ -19,7 +19,7 @@ function Login() {
       return
     }
 
-    axios.post('http://127.0.0.1:8000/api/login', { email, password })
+    axios.post('https://vossai.onrender.com/api/login/', { email, password })
       .then((res) => {
         localStorage.setItem('token', res.data.access)
         localStorage.setItem('name',  res.data.name)
