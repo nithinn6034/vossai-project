@@ -1,12 +1,9 @@
-from django.contrib import admin
-from django.urls import path, include, re_path
-from django.shortcuts import render
-
-def frontend(request):
-    return render(request, 'index.html')
+from django.urls import path
+from . import views
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('api/', include('vossai_app.urls')),
-    re_path(r'^.*$', frontend),
+    path('register/', views.register, name='register'),
+    path('login/', views.login, name='name'),
+    path('tasks/', views.task_list, name='task_list'),
+    path('tasks/<str:pk>/', views.task_detail, name='task_detail'),
 ]
