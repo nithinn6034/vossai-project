@@ -10,9 +10,7 @@ from datetime import timedelta
 
 load_dotenv()
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # ==============================================================================
 # CORE SETTINGS
@@ -23,7 +21,6 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'fallback-secret-key-change-in-product
 DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
-
 
 # ==============================================================================
 # INSTALLED APPS
@@ -41,7 +38,6 @@ INSTALLED_APPS = [
     'corsheaders',
 ]
 
-
 # ==============================================================================
 # MIDDLEWARE
 # ==============================================================================
@@ -49,7 +45,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',  # for static files on Render
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -58,14 +54,12 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-
 # ==============================================================================
 # URLS & WSGI
 # ==============================================================================
 
 ROOT_URLCONF = 'vossai_project.urls'
 WSGI_APPLICATION = 'vossai_project.wsgi.application'
-
 
 # ==============================================================================
 # TEMPLATES
@@ -74,7 +68,7 @@ WSGI_APPLICATION = 'vossai_project.wsgi.application'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'frontend' / 'dist'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -86,9 +80,8 @@ TEMPLATES = [
     },
 ]
 
-
 # ==============================================================================
-# DATABASE (SQLite for dev — swap to PostgreSQL for production if needed)
+# DATABASE
 # ==============================================================================
 
 DATABASES = {
@@ -97,7 +90,6 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
 
 # ==============================================================================
 # MONGODB
@@ -108,7 +100,6 @@ MONGO_DB_NAME = os.environ.get('MONGO_DB_NAME', 'vossai_db')
 
 MONGO_CLIENT = pymongo.MongoClient(MONGO_URI)
 MONGO_DB     = MONGO_CLIENT[MONGO_DB_NAME]
-
 
 # ==============================================================================
 # AUTH
@@ -123,10 +114,9 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
-
 # ==============================================================================
 # REST FRAMEWORK & JWT
-
+# ==============================================================================
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -145,7 +135,6 @@ SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('Bearer',),
 }
 
-
 # ==============================================================================
 # CORS
 # ==============================================================================
@@ -157,42 +146,37 @@ CORS_ALLOWED_ORIGINS = os.environ.get(
 
 CORS_ALLOW_CREDENTIALS = True
 
-
 # ==============================================================================
 # STATIC FILES
 # ==============================================================================
 
-STATIC_URL  = '/static/'
+STATIC_URL  = '/assets/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-# WhiteNoise compression
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
-TEMPLATES[0]['DIRS'] = [BASE_DIR / 'staticfiles', BASE_DIR / 'frontend' / 'dist']
 
 STATICFILES_DIRS = [
     BASE_DIR / 'frontend' / 'dist' / 'assets',
 ]
 
+# ==============================================================================
 # INTERNATIONALIZATION
-
+# ==============================================================================
 
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE     = 'UTC'
 USE_I18N      = True
 USE_TZ        = True
 
-
-
+# ==============================================================================
 # DEFAULT PRIMARY KEY
-
+# ==============================================================================
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
-
+# ==============================================================================
 # SECURITY (only active when DEBUG=False)
-
+# ==============================================================================
 
 if not DEBUG:
     SECURE_HSTS_SECONDS            = 31536000
