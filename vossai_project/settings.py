@@ -126,7 +126,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # ==============================================================================
 # REST FRAMEWORK & JWT
-# ==============================================================================
+
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -168,10 +168,14 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 # WhiteNoise compression
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
+TEMPLATES[0]['DIRS'] = [BASE_DIR / 'frontend' / 'dist']
 
-# ==============================================================================
+STATICFILES_DIRS = [
+    BASE_DIR / 'frontend' / 'dist' / 'assets',
+]
+
 # INTERNATIONALIZATION
-# ==============================================================================
+
 
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE     = 'UTC'
@@ -179,16 +183,16 @@ USE_I18N      = True
 USE_TZ        = True
 
 
-# ==============================================================================
+
 # DEFAULT PRIMARY KEY
-# ==============================================================================
+
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-# ==============================================================================
+
 # SECURITY (only active when DEBUG=False)
-# ==============================================================================
+
 
 if not DEBUG:
     SECURE_HSTS_SECONDS            = 31536000

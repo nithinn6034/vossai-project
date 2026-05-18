@@ -1,9 +1,12 @@
-from django.urls import path
-from vossai_app import views
+from django.contrib import admin
+from django.urls import path, include
+from django.views.generic import TemplateView
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
-    path('api/register',        views.register,    name='register'),
-    path('api/login',           views.login,       name='login'),
-    path('api/tasks',           views.task_list,   name='task_list'),
-    path('api/tasks/<str:pk>/', views.task_detail, name='task_detail'),
+    path('admin/', admin.site.urls),
+    path('api/', include('vossai_app.urls')),
+    path('', TemplateView.as_view(template_name='index.html')),
+    path('<path:path>', TemplateView.as_view(template_name='index.html')),
 ]
